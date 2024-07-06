@@ -4,7 +4,7 @@ import { IMetaData, TaskStatusEnum } from './tasks.interface';
 @Entity({ name: 'tasks' })
 export class TasksEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   title: string;

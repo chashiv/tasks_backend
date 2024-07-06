@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpException,
   HttpStatus,
   Patch,
@@ -9,10 +10,11 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { ICreateTask, IUpdateTask } from './tasks.interface';
+import { ICreateTask, IGetTask, IUpdateTask } from './tasks.interface';
 import { JoiValidationPipe } from 'src/common/pipes/joi.pipe';
 import {
   createTaskValidations,
+  getTasksValidations,
   updateTaskValidations,
 } from './tasks.validations';
 
@@ -23,18 +25,18 @@ import {
 export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 
+  @Get('get')
+  @UsePipes(new JoiValidationPipe(getTasksValidations))
+  async get(@Body() getTaskDto: IGetTask) {
+    const task = await this.taskService.get(getTaskDto);
+    return task;
+  }
+
   @Post('/create')
   @UsePipes(new JoiValidationPipe(createTaskValidations))
   async create(@Body() createTaskDto: ICreateTask) {
-    try {
-      const task = await this.taskService.create(createTaskDto);
-      return task;
-    } catch (error) {
-      throw new HttpException(
-        'Failed to create task',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const task = await this.taskService.create(createTaskDto);
+    return task;
   }
 
   @Patch('/update')
@@ -46,14 +48,7 @@ export class TasksController {
 
   @Delete('/delete')
   async delete(@Body() createTaskDto: ICreateTask) {
-    try {
-      const task = await this.taskService.create(createTaskDto);
-      return task;
-    } catch (error) {
-      throw new HttpException(
-        'Failed to create task',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const task = await this.taskService.create(createTaskDto);
+    return task;
   }
 }

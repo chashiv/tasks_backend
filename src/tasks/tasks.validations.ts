@@ -21,3 +21,14 @@ export const updateTaskValidations = Joi.object({
   description: Joi.string().trim().optional(),
   metaData: Joi.object().optional(),
 });
+
+export const getTasksValidations = Joi.object({
+  id: Joi.string().uuid().optional(),
+  status: Joi.string()
+    .trim()
+    .valid(...Object.values(TaskStatusEnum))
+    .optional(),
+  title: Joi.object().optional(),
+  description: Joi.string().trim().optional(),
+  metaData: Joi.object().optional(),
+});

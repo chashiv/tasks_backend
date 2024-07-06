@@ -23,3 +23,11 @@ export interface IUpdateTask {
   status?: TaskStatusEnum;
   metaData?: IMetaData;
 }
+
+export interface IGetTask {
+  id: UUID;
+  title?: string;
+  description?: string;
+  status?: TaskStatusEnum;
+  metaData?: IMetaData;
+}
