@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  tasks_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tasks_backend
+    container_name: tasks_backend
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: tasks
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
