@@ -9,9 +9,12 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { ICreateTask } from './tasks.interface';
+import { ICreateTask, IUpdateTask } from './tasks.interface';
 import { JoiValidationPipe } from 'src/common/pipes/joi.pipe';
-import { createTaskValidations } from './tasks.validations';
+import {
+  createTaskValidations,
+  updateTaskValidations,
+} from './tasks.validations';
 
 @Controller({
   path: 'tasks',
@@ -35,16 +38,10 @@ export class TasksController {
   }
 
   @Patch('/update')
-  async update(@Body() createTaskDto: ICreateTask) {
-    try {
-      const task = await this.taskService.create(createTaskDto);
-      return task;
-    } catch (error) {
-      throw new HttpException(
-        'Failed to create task',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  @UsePipes(new JoiValidationPipe(updateTaskValidations))
+  async update(@Body() updateTaskDto: IUpdateTask) {
+    const task = await this.taskService.update(updateTaskDto);
+    return task;
   }
 
   @Delete('/delete')

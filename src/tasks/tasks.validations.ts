@@ -10,3 +10,14 @@ export const createTaskValidations = Joi.object({
   description: Joi.string().trim().required(),
   metaData: Joi.object().optional(),
 });
+
+export const updateTaskValidations = Joi.object({
+  id: Joi.string().uuid().required(),
+  status: Joi.string()
+    .trim()
+    .valid(...Object.values(TaskStatusEnum))
+    .optional(),
+  title: Joi.object().optional(),
+  description: Joi.string().trim().optional(),
+  metaData: Joi.object().optional(),
+});

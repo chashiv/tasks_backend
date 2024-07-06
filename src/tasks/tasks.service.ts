@@ -1,5 +1,5 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { ICreateTask } from './tasks.interface';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ICreateTask, IUpdateTask } from './tasks.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TasksEntity } from './tasks.entity';
 import { Repository } from 'typeorm';
@@ -19,13 +19,25 @@ export class TasksService {
       return task;
     } catch (err) {
       this.loggingService.logError(err.message, err);
+      throw err;
     }
   }
 
-  async update(body: ICreateTask) {
+  async update(body: IUpdateTask) {
     try {
-      return { data: body, status: HttpStatus.OK };
-    } catch (err) {}
+      const { id, ...updateFields } = body;
+      const response = await this.tasksEntity.update(id, updateFields);
+      if (!response.affected) {
+        throw new HttpException(
+          `Task with id: ${id} not found`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return response;
+    } catch (err) {
+      this.loggingService.logError(err.message, err);
+      throw err;
+    }
   }
 
   async get(body: ICreateTask) {
