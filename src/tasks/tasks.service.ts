@@ -1,5 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ICreateTask, IGetTask, IUpdateTask } from './tasks.interface';
+import {
+  ICreateTask,
+  IDeleteTask,
+  IGetTask,
+  IUpdateTask,
+} from './tasks.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TasksEntity } from './tasks.entity';
 import { Repository } from 'typeorm';
@@ -12,6 +17,18 @@ export class TasksService {
     private tasksEntity: Repository<TasksEntity>,
     private loggingService: LoggingService,
   ) {}
+
+  async get(body: IGetTask) {
+    try {
+      const response = await this.tasksEntity.findAndCount({
+        where: { ...body },
+      });
+      return response;
+    } catch (err) {
+      this.loggingService.logError(err.message, err);
+      throw err;
+    }
+  }
 
   async create(body: ICreateTask) {
     try {
@@ -40,21 +57,13 @@ export class TasksService {
     }
   }
 
-  async get(body: IGetTask) {
+  async delete(body: IDeleteTask) {
     try {
-      const response = await this.tasksEntity.findAndCount({
-        where: { ...body },
-      });
+      const response = await this.tasksEntity.delete(body);
       return response;
     } catch (err) {
       this.loggingService.logError(err.message, err);
-      throw new Error('Failed to fetch tasks');
+      throw err;
     }
-  }
-
-  async delete(body: ICreateTask) {
-    try {
-      return { data: body, status: HttpStatus.OK };
-    } catch (err) {}
   }
 }

@@ -3,17 +3,21 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Patch,
   Post,
   UsePipes,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { ICreateTask, IGetTask, IUpdateTask } from './tasks.interface';
+import {
+  ICreateTask,
+  IDeleteTask,
+  IGetTask,
+  IUpdateTask,
+} from './tasks.interface';
 import { JoiValidationPipe } from 'src/common/pipes/joi.pipe';
 import {
   createTaskValidations,
+  deleteTaskValidations,
   getTasksValidations,
   updateTaskValidations,
 } from './tasks.validations';
@@ -47,8 +51,9 @@ export class TasksController {
   }
 
   @Delete('/delete')
-  async delete(@Body() createTaskDto: ICreateTask) {
-    const task = await this.taskService.create(createTaskDto);
+  @UsePipes(new JoiValidationPipe(deleteTaskValidations))
+  async delete(@Body() deleteTaskDto: IDeleteTask) {
+    const task = await this.taskService.delete(deleteTaskDto);
     return task;
   }
 }

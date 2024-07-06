@@ -10,6 +10,14 @@ export interface IMetaData {
   [key: string]: string;
 }
 
+export interface IGetTask {
+  id: UUID;
+  title?: string;
+  description?: string;
+  status?: TaskStatusEnum;
+  metaData?: IMetaData;
+}
+
 export interface ICreateTask {
   title: string;
   description: string;
@@ -24,7 +32,7 @@ export interface IUpdateTask {
   metaData?: IMetaData;
 }
 
-export interface IGetTask {
+export interface IDeleteTask {
   id: UUID;
   title?: string;
   description?: string;
