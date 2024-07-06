@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { TaskStatusEnum } from './tasks.interface';
+import { IMetaData, TaskStatusEnum } from './tasks.interface';
 
-@Entity()
-export class Tasks {
-  @PrimaryGeneratedColumn()
+@Entity({ name: 'tasks' })
+export class TasksEntity {
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
@@ -19,6 +19,6 @@ export class Tasks {
   })
   status: TaskStatusEnum;
 
-  @Column()
-  metaData: JSON;
+  @Column({ type: 'jsonb', nullable: true })
+  metaData: IMetaData;
 }

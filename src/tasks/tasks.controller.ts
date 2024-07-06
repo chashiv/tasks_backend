@@ -6,9 +6,12 @@ import {
   HttpStatus,
   Patch,
   Post,
+  UsePipes,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { ICreateTask } from './tasks.interface';
+import { JoiValidationPipe } from 'src/common/pipes/joi.pipe';
+import { createTaskValidations } from './tasks.validations';
 
 @Controller({
   path: 'tasks',
@@ -18,6 +21,7 @@ export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 
   @Post('/create')
+  @UsePipes(new JoiValidationPipe(createTaskValidations))
   async create(@Body() createTaskDto: ICreateTask) {
     try {
       const task = await this.taskService.create(createTaskDto);

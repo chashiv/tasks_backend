@@ -1,7 +1,11 @@
 export enum TaskStatusEnum {
-  TO_DO = 'to_do',
-  IN_PROGRESS = 'in_progress',
-  DONE = 'done',
+  TO_DO = 'TO_DO',
+  IN_PROGRESS = 'IN_PROGRESS',
+  DONE = 'DONE',
+}
+
+export interface IMetaData {
+  [key: string]: string;
 }
 
 export interface ICreateTask {
