@@ -5,6 +5,7 @@ import {
   Get,
   Patch,
   Post,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
@@ -21,6 +22,7 @@ import {
   getTasksValidations,
   updateTaskValidations,
 } from './tasks.validations';
+import { JWTAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller({
   path: 'tasks',
@@ -30,6 +32,7 @@ export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 
   @Get('get')
+  @UseGuards(JWTAuthGuard)
   @UsePipes(new JoiValidationPipe(getTasksValidations))
   async get(@Body() getTaskDto: IGetTask) {
     const task = await this.taskService.get(getTaskDto);
@@ -37,6 +40,7 @@ export class TasksController {
   }
 
   @Post('/create')
+  @UseGuards(JWTAuthGuard)
   @UsePipes(new JoiValidationPipe(createTaskValidations))
   async create(@Body() createTaskDto: ICreateTask) {
     const task = await this.taskService.create(createTaskDto);
@@ -44,6 +48,7 @@ export class TasksController {
   }
 
   @Patch('/update')
+  @UseGuards(JWTAuthGuard)
   @UsePipes(new JoiValidationPipe(updateTaskValidations))
   async update(@Body() updateTaskDto: IUpdateTask) {
     const task = await this.taskService.update(updateTaskDto);
@@ -51,6 +56,7 @@ export class TasksController {
   }
 
   @Delete('/delete')
+  @UseGuards(JWTAuthGuard)
   @UsePipes(new JoiValidationPipe(deleteTaskValidations))
   async delete(@Body() deleteTaskDto: IDeleteTask) {
     const task = await this.taskService.delete(deleteTaskDto);

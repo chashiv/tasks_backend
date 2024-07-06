@@ -4,11 +4,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggingMiddleware } from './middleware/logging.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { PassportModule } from '@nestjs/passport';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    TasksModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
+    }),
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
         return {
@@ -24,6 +28,9 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       },
       inject: [ConfigService],
     }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    TasksModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
