@@ -55,6 +55,11 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Front End Repo URL
+
+```
+https://github.com/chashiv/tasks_frontend
+```
 
 ## Stay in touch
 

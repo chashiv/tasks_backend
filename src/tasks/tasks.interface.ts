@@ -16,9 +16,11 @@ export interface IGetTask {
   description?: string;
   status?: TaskStatusEnum;
   metaData?: IMetaData;
+  userId: string;
 }
 
 export interface ICreateTask {
+  userId: string;
   title: string;
   description: string;
   status: TaskStatusEnum;
@@ -30,6 +32,7 @@ export interface IUpdateTask {
   description?: string;
   status?: TaskStatusEnum;
   metaData?: IMetaData;
+  userId: string;
 }
 
 export interface IDeleteTask {
@@ -38,4 +41,5 @@ export interface IDeleteTask {
   description?: string;
   status?: TaskStatusEnum;
   metaData?: IMetaData;
+  userId: string;
 }

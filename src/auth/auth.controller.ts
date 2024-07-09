@@ -1,8 +1,5 @@
 import { Body, Controller, Post, UsePipes } from '@nestjs/common';
-import {
-  loginUserValidations,
-  validateUserValidations,
-} from './auth.validations';
+import { loginUserValidations, validateUserValidations } from './auth.validations';
 import { JoiValidationPipe } from 'src/common/pipes/joi.pipe';
 import { ILoginUser, IValidateUser } from './auth.interface';
 import { AuthService } from './auth.service';

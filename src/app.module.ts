@@ -1,11 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { LoggingMiddleware } from './middleware/logging.middleware';
+import { LoggingMiddleware } from './middleware/logging/logging.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { AuthMiddleware } from './middleware/auth/auth.middleware';
 
 @Module({
   imports: [
@@ -31,12 +33,19 @@ import { AuthModule } from './auth/auth.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     TasksModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggingMiddleware).forRoutes('*');
+    consumer
+      .apply(LoggingMiddleware)
+      .forRoutes('*')
+      .apply(AuthMiddleware)
+      .exclude('v1/auth/login')
+      .exclude('/v1/users/sign-up')
+      .forRoutes('*');
   }
 }

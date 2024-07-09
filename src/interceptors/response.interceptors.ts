@@ -8,10 +8,7 @@ import {
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import {
-  SuccessResponseDTO,
-  ErrorResponseDTO,
-} from '../common/dto/response.dto';
+import { SuccessResponseDTO, ErrorResponseDTO } from '../common/dto/response.dto';
 
 @Injectable()
 export class ResponseInterceptor<T>
@@ -30,9 +27,7 @@ export class ResponseInterceptor<T>
       }),
       catchError((error) => {
         const statusCode =
-          error instanceof HttpException
-            ? error.getStatus()
-            : HttpStatus.INTERNAL_SERVER_ERROR;
+          error instanceof HttpException ? error.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
         const message = error.message || 'Internal Server Error';
         const stack = error.stack;
         const errorResponse = new ErrorResponseDTO<T>('failed', {

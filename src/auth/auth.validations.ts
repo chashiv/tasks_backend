@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 
 export const loginUserValidations = Joi.object({
-  username: Joi.string().trim().required(),
+  email: Joi.string().trim().required(),
   password: Joi.string().trim().required(),
 });
 

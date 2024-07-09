@@ -1,15 +1,31 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { IMetaData, TaskStatusEnum } from './tasks.interface';
+import { UsersEntity } from 'src/users/users.entity';
 
 @Entity({ name: 'tasks' })
 export class TasksEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'uuid' })
+  userId: string;
+
+  @ManyToOne(() => UsersEntity, (user) => user.id)
+  @JoinColumn({ name: 'user_id' })
+  user: UsersEntity;
+
+  @Column({ type: 'varchar' })
   title: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   description: string;
 
   @Column({
@@ -21,4 +37,10 @@ export class TasksEntity {
 
   @Column({ type: 'jsonb', nullable: true })
   metaData: IMetaData;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

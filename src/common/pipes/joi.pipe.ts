@@ -27,9 +27,7 @@ export class JoiValidationPipe implements PipeTransform {
   }
 }
 
-export const RequestHeaders = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
-    const req = ctx.switchToHttp().getRequest();
-    return data ? req.headers[data as any] : req.headers;
-  },
-);
+export const RequestHeaders = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+  const req = ctx.switchToHttp().getRequest();
+  return data ? req.headers[data as any] : req.headers;
+});

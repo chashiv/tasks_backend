@@ -1,10 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import {
-  ICreateTask,
-  IDeleteTask,
-  IGetTask,
-  IUpdateTask,
-} from './tasks.interface';
+import { ICreateTask, IDeleteTask, IGetTask, IUpdateTask } from './tasks.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TasksEntity } from './tasks.entity';
 import { Repository } from 'typeorm';
@@ -20,7 +15,7 @@ export class TasksService {
 
   async get(body: IGetTask) {
     try {
-      const response = await this.tasksEntity.findAndCount({
+      const response = await this.tasksEntity.find({
         where: { ...body },
       });
       return response;
@@ -45,10 +40,7 @@ export class TasksService {
       const { id, ...updateFields } = body;
       const response = await this.tasksEntity.update(id, updateFields);
       if (!response.affected) {
-        throw new HttpException(
-          `Task with id: ${id} not found`,
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException(`Task with id: ${id} not found`, HttpStatus.BAD_REQUEST);
       }
       return response;
     } catch (err) {
